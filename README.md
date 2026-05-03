@@ -1,98 +1,117 @@
-# Churn Prediction Project
+# Customer Churn Prediction
 
-## Goal
-
-Predict customer churn using machine learning models and compare performance.
+A machine learning project that predicts customer churn using structured telecom data. The goal is to identify customers likely to leave and optimize detection using threshold tuning.
 
 ---
 
-## Dataset
+## Problem Overview
 
-Telco Customer Churn dataset (~7000 rows)
-
-Target:
-
-* 1 = churn
-* 0 = no churn
+Customer churn is a binary classification problem where the goal is to predict whether a customer will leave the service based on behavioral and contract-related features.
 
 ---
 
-## Pipeline
+## Methodology
 
-### Preprocessing
+### Data Preprocessing
 
-* Removed irrelevant columns (IDs, geography, etc.)
-* Converted target to binary
-* Handled missing values in Total Charges
-* One-hot encoded categorical variables (fit on training set only)
-* Train/validation/test split (no leakage)
+* Removed irrelevant and leakage-prone columns (e.g. churn reason, location metadata)
+* Converted target variable into binary format
+* Handled missing values in numeric fields
+* Applied one-hot encoding to categorical variables
 
----
+### Models Used
 
-## Models
+* Logistic Regression (baseline, interpretable model)
+* Random Forest (non-linear model for comparison)
 
-### Logistic Regression
+### Training Strategy
 
-* L2 regularization (C tuned)
-* Requires feature scaling
-* Final parameters:
-
-  * C = 0.001
-  * threshold = 0.47 (validation-tuned)
+* Train / validation / test split
+* Hyperparameter tuning on validation set only
+* Threshold tuning for optimal classification performance
 
 ---
 
-### Random Forest
+## Pipeline Overview
 
-* n_estimators = 200
-* max_depth = 10
-* min_samples_leaf = 5
-* threshold = 0.29 (validation-tuned)
+```
+Raw Data
+   ↓
+Data Cleaning
+   ↓
+Feature Encoding (One-Hot)
+   ↓
+Train / Validation / Test Split
+   ↓
+Model Training (LR / RF)
+   ↓
+Threshold Tuning (Validation)
+   ↓
+Final Evaluation (Test Set)
+```
 
 ---
 
 ## Evaluation Strategy
 
-* Metrics: precision, recall, F1-score, accuracy
-* Threshold tuning performed on validation set only
-* Final evaluation done once on test set
+Models were evaluated using:
+
+* Accuracy
+* Precision / Recall
+* F1-score
+* Confusion matrix
+
+Special focus was placed on **recall for churn class**, due to business importance of identifying at-risk customers.
 
 ---
 
-## Results
+## Final Results
 
-### Logistic Regression (Test)
+### Logistic Regression
 
-* Accuracy: 0.77
-* Precision (Churn): 0.55
-* Recall (Churn): 0.70
-* F1-score (Churn): 0.62
+* Accuracy: ~0.77
+* Churn F1-score: ~0.62
+* Recall (Churn): ~0.70
 
----
+### Random Forest
 
-### Random Forest (Test)
-
-* Accuracy: 0.76
-* Precision (Churn): 0.53
-* Recall (Churn): 0.70
-* F1-score (Churn): 0.61
+* Accuracy: ~0.74
+* Churn F1-score: ~0.62
+* Recall (Churn): ~0.79
 
 ---
 
 ## Key Insights
 
-* Both models perform similarly after tuning
-* Logistic Regression slightly outperforms Random Forest in F1
-* Strongest predictors:
+* Churn prediction performance is highly sensitive to decision threshold
+* Lower thresholds improve recall at the cost of precision
+* Important drivers of churn:
 
-  * tenure
-  * contract type
-  * monthly/total charges
-  * support services
-  * payment method
+  * Contract type
+  * Tenure
+  * Monthly charges
+  * Support-related services
 
 ---
 
-## Conclusion
+## Tech Stack
 
-Churn behavior is largely driven by structured linear relationships in the data. Model performance depends more on feature quality and preprocessing than model complexity.
+* Python
+* pandas, numpy
+* scikit-learn
+
+---
+
+## Project Structure
+
+src/ → reusable ML pipeline code
+train.py → main training script
+data/ → dataset (excluded from GitHub)
+README.md → project documentation
+
+---
+
+## How to Run
+
+pip install -r requirements.txt
+python train.py

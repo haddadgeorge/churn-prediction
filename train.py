@@ -1,10 +1,6 @@
-import pandas as pd
-from sklearn.preprocessing import OneHotEncoder
-import numpy as np
-
 from src.preprocessing import load_data, clean_data, split_data
 from src.models import train_random_forest, train_logistic_regression
-from src.evaluation import evaluate, tune_threshold
+#from src.evaluation import evaluate, tune_threshold
 
 
 # --------------------
@@ -36,7 +32,7 @@ X_train_final, X_val_final, X_test_final, encoder = encode_features(
 # RANDOM FOREST
 # --------------------
 from src.models import train_random_forest
-from src.evaluation import evaluate, tune_threshold
+#from src.evaluation import evaluate, tune_threshold
 
 rf = train_random_forest(X_train_final, y_train)
 
